@@ -9,17 +9,17 @@ class StatusTest(TestCase):
     def test_public(self):
         urls = [
             {
-                'url':'/accounts/login/',
+                'url':'/user/login/',
                 'status':200,
                 'template':'registration/login.html'
             },
             {
-                'url':'/accounts/logout/',
+                'url':'/user/logout/',
                 'status':302,
                 'template':'registration/login.html'
             },
             {
-                'url':'/accounts/profile/',
+                'url':'/user/profile/',
                 'status':302,
                 'template':'registration/login.html'
             }
@@ -44,7 +44,7 @@ class StatusTest(TestCase):
     
     def test_login(self):
         self.test_create_user()
-        response = self.client.post('/accounts/login/', {
+        response = self.client.post('/user/login/', {
             'username':'john',
             'password':'trytoguess'
         }, follow=True)
