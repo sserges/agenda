@@ -11,17 +11,17 @@ class StatusTest(TestCase):
             {
                 'url':'/user/login/',
                 'status':200,
-                'template':'registration/login.html'
+                'template':'user/login.html'
             },
             {
                 'url':'/user/logout/',
                 'status':302,
-                'template':'registration/login.html'
+                'template':'user/login.html'
             },
             {
                 'url':'/user/profile/',
                 'status':302,
-                'template':'registration/login.html'
+                'template':'user/login.html'
             }
         ]
 

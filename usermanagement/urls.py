@@ -8,10 +8,10 @@ from .views import create_account
 urlpatterns = [
     url(r'^create_account/$', create_account),
     url(r'^succes/$', TemplateView.as_view(template_name="user/succes.html")),
-    url(r'^login/$', login),
+    url(r'^login/$', login, {'template_name':'user/login.html'}),
     url(r'^logout/$', logout, {'next_page':'/user/login/'}),
     url(
         r'^profile/$',
-        login_required(TemplateView.as_view(template_name="registration/profile.html"))
+        login_required(TemplateView.as_view(template_name="user/profile.html"))
     ),
 ]
