@@ -2,3 +2,16 @@
 <p>{{ event.description }}</p>
 <p>le {{ event.date }}</p>
 <p>à {{ event.lieu }}</p>
+
+<p>
+    {% for participant in event.evenement_participant_set.all %}
+        {{ participant.participant }} {{ participant.get_status_display }} <br/>
+    {% endfor %}
+</p>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <input type="submit" value="Créer" />
+</form>

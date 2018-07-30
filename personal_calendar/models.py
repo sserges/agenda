@@ -34,11 +34,14 @@ class Evenement(models.Model):
     >>> rendezvous.nom
     'Rendez-vous chez le dentiste'
     """
-    nom = models.CharField(max_length=250)
+    nom = models.CharField(max_length=250, unique=True)
     description = models.TextField()
     participants = models.ManyToManyField(User, through="Evenement_Participant")
     date = models.DateTimeField()
     lieu = models.TextField()
+
+    def __str__(self):
+        return self.nom
 
 
 class Evenement_Participant(models.Model):
@@ -50,3 +53,6 @@ class Evenement_Participant(models.Model):
         (2, "désisté")
     )
     status = models.IntegerField(choices=status_choices)
+
+    class Meta:
+        unique_together = ("evenement", "participant")
