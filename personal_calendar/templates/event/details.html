@@ -5,7 +5,14 @@
 
 <p>
     {% for participant in event.evenement_participant_set.all %}
-        {{ participant.participant }} {{ participant.get_status_display }} <br/>
+        <p>
+            {{ participant.participant }} {{ participant.get_status_display }}
+
+            <form action="/agenda/{{event.id}}/participant/{{participant.participant.id}}/delete/" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Supprimer" />
+            </form>
+        </p>
     {% endfor %}
 </p>
 
