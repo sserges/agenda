@@ -2,15 +2,29 @@
 <p>{{ event.description }}</p>
 <p>le {{ event.date }}</p>
 <p>à {{ event.lieu }}</p>
+<form action="{% url 'delete_event' event.id %}" method="POST">
+    {% csrf_token %}
+
+    <input
+        type="submit"
+        value="Supprimer l'évènement"
+        onclick="return confirm('Voulez-vous vraiment supprimer cet évènement ?')"
+    />
+</form>
 
 <p>
-    {% for participant in event.evenement_participant_set.all %}
+    {% for ev_par in event.evenement_participant_set.all %}
         <p>
-            {{ participant.participant }} {{ participant.get_status_display }}
+            {{ ev_par.participant }} {{ participant.get_status_display }}
 
-            <form action="/agenda/{{event.id}}/participant/{{participant.participant.id}}/delete/" method="POST">
+            <form action="{% url 'delete_participant' event.id ev_par.participant.id  %}" method="POST">
                 {% csrf_token %}
-                <input type="submit" value="Supprimer" />
+                
+                <input 
+                    type="submit"
+                    value="Supprimer"
+                    onclick="return confirm('Supprimer {{ ev_par.participant }} de l\'évènement {{ event.nom }}')"
+                />
             </form>
         </p>
     {% endfor %}
@@ -22,3 +36,5 @@
     
     <input type="submit" value="Créer" />
 </form>
+
+<p><a href="{% url 'list_event' %}">Retour à la liste</a></p>

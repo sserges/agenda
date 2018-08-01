@@ -5,7 +5,7 @@ from django.forms import HiddenInput
 from .forms import EventForm, Evenement_ParticipantForm
 from .models import Evenement, Evenement_Participant
 
-def create(request):
+def create_event(request):
     if request.method == "POST":
         form = EventForm(request.POST)
         if form.is_valid():
@@ -17,7 +17,7 @@ def create(request):
     return render(request, 'event/create.html', {'form':form})
 
 
-def details(request, id):
+def event_details(request, id):
     event = Evenement.objects.get(pk=id)
     if request.method == "POST":
         form = Evenement_ParticipantForm(request.POST)
@@ -49,3 +49,30 @@ def delete_participant(request, id_event, id_participant):
         
         a_supprimer.delete()
     return HttpResponseRedirect('/agenda/%s/details/' % id_event)
+
+
+def list_event(request):
+    events = Evenement.objects.all()
+    return render(request, 'event/list.html', {"events":events})
+
+
+def delete_event(request, id):
+    if request.method == "POST":
+        event = Evenement.objects.get(pk=id)
+        event.delete()
+        return HttpResponseRedirect('/agenda/list/')
+
+
+def update_event(request, id):
+    event = Evenement.objects.get(pk=id)
+    if request.method == "POST":
+        print(request.POST)
+        form = EventForm(request.POST, instance=event)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/agenda/%i/details/' % event.pk)
+    else:
+        form = EventForm(instance=event)
+    
+    return render(request, 'event/create.html', {'form':form})
+

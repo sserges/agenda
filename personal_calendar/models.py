@@ -42,6 +42,9 @@ class Evenement(models.Model):
 
     def __str__(self):
         return self.nom
+    
+    def get_absolute_url(self):
+        return "/agenda/%s/details/" % self.id
 
 
 class Evenement_Participant(models.Model):
