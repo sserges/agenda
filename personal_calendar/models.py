@@ -45,6 +45,9 @@ class Evenement(models.Model):
     
     def get_absolute_url(self):
         return "/agenda/%s/details/" % self.id
+    
+    def delete_url(self):
+        return "/agenda/%s/delete/" % self.id
 
 
 class Evenement_Participant(models.Model):
@@ -56,6 +59,9 @@ class Evenement_Participant(models.Model):
         (2, "désisté")
     )
     status = models.IntegerField(choices=status_choices)
+
+    def delete_url(self):
+        return "/agenda/%i/participant/%i/delete/" % (self.evenement.id, self.participant.id)
 
     class Meta:
         unique_together = ("evenement", "participant")

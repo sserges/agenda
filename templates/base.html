@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>
+            Agenda partagé - 
+            {% block titre %}
+            {% endblock titre %}
+        </title>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <div id="header"></div>
+
+        <div id="menu"></div>
+
+        <div id="content">
+            {% block content %}
+                Bonjour depuis "base.html"
+            {% endblock content %}
+        </div>
+
+        <div id="footer"></div>
+    </body>
+</html>
