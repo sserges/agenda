@@ -1,5 +1,7 @@
-<html>
+<html lang="fr">
     <head>
+            {% load static %}
+            <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}" />
         <title>
             Agenda partagé - 
             {% block titre %}
@@ -19,5 +21,15 @@
         </div>
 
         <div id="footer"></div>
+        
+        <script src="{% static 'js/jquery-1.12.4.js' %}"></script>
+        <script src="{% static 'js/jquery-ui.js' %}"></script>
+        {% block scriptjs %}
+            <script>
+                $(function() {
+                    alert($('h3').first().text());
+                });
+            </script>
+        {% endblock scriptjs %}
     </body>
 </html>
