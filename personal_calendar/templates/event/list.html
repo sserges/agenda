@@ -8,10 +8,13 @@
     <ul>
         {% for event in events %}
             <li>
-                <h3><a href="{% url 'event_details' event.id %}">{{ event.nom }}</a></h3>
-                <p>le {{ event.date }}</p>
-                <p>à {{ event.lieu }}</p>
-                <p><a href="{% url 'update_event' event.id %}">Modifier l'événement</a></p>
+                <h3>
+                    <a href="" class="titre">{{ event.nom }}</a>
+                    <a href="{% url 'event_details' event.id %}">(détails)</a>
+                </h3>
+                <p class="event">le {{ event.date }}</p>
+                <p class="event">à {{ event.lieu }}</p>
+                <p class="event"><a href="{% url 'update_event' event.id %}">Modifier l'événement</a></p>
             </li>
         {% endfor %}
     </ul>
@@ -20,3 +23,15 @@
         <a href="{% url 'create_event' %}">Créer un nouvel événement</a>
     </p>
 {% endblock content %}
+
+{% block scriptjs %}
+    <script>
+        $('document').ready(function() {
+            $('.event').hide();
+            $('.titre').click(function(e) {
+                $(this).parent().parent().children('.event').toggle();
+                e.preventDefault();
+            });
+        });
+    </script>
+{% endblock scriptjs %}

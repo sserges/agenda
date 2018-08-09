@@ -1,40 +1,73 @@
-<h1>{{ event.nom }}</h1>
-<p>{{ event.description }}</p>
-<p>le {{ event.date }}</p>
-<p>à {{ event.lieu }}</p>
+{% extends "base.html" %}
 
-<p>
-    {% for ev_par in event.evenement_participant_set.all %}
-        <p>
-            {{ ev_par.participant }} {{ participant.get_status_display }}
-            {{ ev_par.delete_url }}
+{% block content %}
+    <h1>{{ event.nom }}</h1>
+    <p>{{ event.description }}</p>
+    <p>le {{ event.date }}</p>
+    <p>à {{ event.lieu }}</p>
 
-            <!-- <form action="{% url 'delete_participant' event.id ev_par.participant.id  %}" method="POST">
-                {% csrf_token %}
-                
-                <input 
-                    type="submit"
-                    value="Supprimer"
-                    onclick="return confirm('Supprimer {{ ev_par.participant }} de l\'évènement {{ event.nom }}')"
-                />
-            </form> -->
-            {% with delete_url=ev_par.delete_url %}
-                {% include "blocks/delete_form.html" %}
-            {% endwith %}
-        </p>
-    {% endfor %}
-</p>
+    <p id="participants">
+        {% for ev_par in event.evenement_participant_set.all %}
+            <p>
+                {{ ev_par.participant }} {{ ev_par.get_status_display }}
+                {% with delete_url=ev_par.delete_url %}
+                    {% include "blocks/delete_form.html" %}
+                {% endwith %}
+            </p>
+        {% endfor %}
+    </p>
 
-<form action="" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    
-    <input type="submit" value="Créer" />
-</form>
+    {% include "blocks/participant_form.html" %}
 
-{% with delete_url=event.delete_url %}
-    {% include "blocks/delete_form.html" %}
-{% endwith %}
-<a href="{% url 'update_event' event.id %}">Modifier</a>
+    {% with delete_url=event.delete_url %}
+        {% include "blocks/delete_form.html" %}
+    {% endwith %}
+    <a href="{% url 'update_event' event.id %}">Modifier</a>
 
-<p><a href="{% url 'list_event' %}">Retour à la liste</a></p>
+    <p><a href="{% url 'list_event' %}">Retour à la liste</a></p>
+{% endblock content %}
+
+{% block scriptjs %}
+    <script>
+        $(function() {
+            $("#participant_form").on("submit", function(e) {
+                $.ajax({
+                    type: "POST",
+                    data: $(this).serialize(),
+                    url: "",
+                    success: function(data) {
+                        if (typeof(data) == "string") {
+                            $("#participant_form").html(data);
+                        } else {
+                        $("#participants").append(
+                            "<p>"
+                            + data.participant + ": "
+                            + data.get_status_display + ""
+                            + data.delete_form +
+                            "</p>"
+                        )
+                        $("#participant_form").replaceWith(data.participant_form);
+                        }
+                        //console.log(typeof(data));
+                    }
+                });
+                e.preventDefault();
+            });
+
+            // $(".delete").on("submit", function(e) {
+            //     form = $(this);
+            //     $.ajax({
+            //         type: "POST",
+            //         data: $(this).serialize(),
+            //         url: $(this).attr("action"),
+            //         success: function(data) {
+            //             // if (data.data == "OK") {
+            //                 form.parent().remove()
+            //             // }
+            //         }
+            //     });
+            //     e.preventDefault();
+            // });
+        });
+    </script>
+{% endblock scriptjs %}
