@@ -6,7 +6,7 @@
 
 {% block content %}
     <ul>
-        {% for event in events %}
+        {% for event in object_list %}
             <li>
                 <h3>
                     <a href="" class="titre">{{ event.nom }}</a>
@@ -23,21 +23,8 @@
         <a href="{% url 'create_event' %}">Créer un nouvel événement</a>
     </p>
 
-    <p>
-        {% if events.has_previous %}
-            <a href="?page={{ events.previous_page_number }}">précédent</a>
-        {% endif %}
+   {% include "blocks/pagination.html" %}
 
-        {# Page {{ events.number }} sur {{ events.paginator.num_pages }} 
-
-        {% for p in nb_pages %}
-            <a href="?page={{ p }}">{{ p }}</a>
-        {% endfor %}#}
-
-        {% if events.has_next %}
-            <a href="?page={{ events.next_page_number }}">suivant</a>
-        {% endif %}
-    </p>
 {% endblock content %}
 
 {% block scriptjs %}

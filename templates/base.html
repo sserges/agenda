@@ -25,11 +25,6 @@
         <script src="{% static 'js/jquery-1.12.4.js' %}"></script>
         <script src="{% static 'js/jquery-ui.js' %}"></script>
         {% block scriptjs %}
-            <script>
-                $(function() {
-                    alert($('h3').first().text());
-                });
-            </script>
         {% endblock scriptjs %}
     </body>
 </html>

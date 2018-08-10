@@ -4,7 +4,9 @@ from django.contrib.auth.models import User
 from django.forms import HiddenInput
 from django.template.loader import render_to_string
 from django.template import RequestContext
-import json
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.views.generic.list import ListView
+import datetime
 
 from .forms import EventForm, Evenement_ParticipantForm
 from .models import Evenement, Evenement_Participant
@@ -101,7 +103,21 @@ def delete_participant(request, id_event, id_participant):
 
 def list_event(request):
     events = Evenement.objects.all()
-    return render(request, 'event/list.html', {"events":events})
+    paginator = Paginator(events, 3)
+
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+    
+    try:
+        events = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        events = paginator.page(paginator.num_pages)
+    
+    nb_pages = [x for x in range(1, paginator.num_pages+1)]
+
+    return render(request, 'event/list.html', {"events":events, "nb_pages":nb_pages})
 
 
 def delete_event(request, id):
@@ -124,3 +140,13 @@ def update_event(request, id):
     
     return render(request, 'event/create.html', {'form':form})
 
+
+class Evenement_Liste(ListView):
+
+    def get_queryset(self):
+        events = Evenement.objects.all()
+        
+        if "champ" in self.kwargs:
+            events = events.filter((self.kwargs['champ'], self.kwargs['terme']))
+        
+        return events    
